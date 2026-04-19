@@ -37,7 +37,6 @@ async function connectToDatabase() {
   } catch (error) {
     console.error('MongoDB connection error:', error.message);
   }
-  throw new Error('connectToDatabase not implemented. See TODO above.')
 }
 
 app.locals.publicDir = publicDir;
