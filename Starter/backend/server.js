@@ -25,6 +25,18 @@ const publicDir = path.join(__dirname, 'public');
 
 async function connectToDatabase() {
   // Your code here
+  //1
+  if (!process.env.MONGODB_URI) {
+    console.warn('MONGODB_URI is missing.');
+    return;
+  }
+  //2
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, { dbName: 'blog' });
+    console.log('Connected to MongoDB');
+  } catch (error) {
+    console.error('MongoDB connection error:', error.message);
+  }
   throw new Error('connectToDatabase not implemented. See TODO above.')
 }
 
