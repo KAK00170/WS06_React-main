@@ -14,31 +14,21 @@ function NewPostPage() {
   const [error, setError] = useState(null)
 
   async function handleSubmit(e) {
-    e.preventDefault()
     setSubmitting(true)
     setError(null)
 
     // TODO (student): Implement this submit logic.
     try {
-      const response = await fetch('/api/posts', {
+      const res = await fetch('/api/posts', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          title: e.target.title.value,
-          author: e.target.author.value,
-          content: e.target.content.value
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(e)
       })
-      if (!response.ok) {
-        throw new Error('Failed to create post')
-      }
-      const data = await response.json()
-      navigate(`/posts/${data._id}`)
+      if (!res.ok) throw new Error('Server error: ' + res.statusText)
+      const newPost = await res.json()
+      navigate(`/posts/${newPost._id}`)
     } catch (err) {
       setError(err.message)
-    } finally {
       setSubmitting(false)
     }
   }
