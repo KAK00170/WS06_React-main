@@ -36,35 +36,29 @@ function EditPostPage() {
       })
   }, [id])
 
-  async function handleSubmit(e) {
-    e.preventDefault()
+  async function handleSubmit(data) {
     setSubmitting(true)
     setError(null)
-
-    // TODO (student): Implement PUT /api/posts/:id.
+    
     try {
-      const response = await fetch(`/api/posts/${id}`, {
+      const res = await fetch(`/api/posts/${id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          title: e.target.title.value,
-          author: e.target.author.value,
-          content: e.target.content.value
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
       })
-      if (!response.ok) {
+      if (!res.ok) { 
         throw new Error('Failed to update post')
       }
-      const data = await response.json()
-      navigate(`/posts/${data._id}`)
+      const updatedPost = await res.json()
+
+      navigate(`/posts/${updatedPost._id}`)
     } catch (err) {
       setError(err.message)
     } finally {
       setSubmitting(false)
     }
   }
+
 
   if (loading) return <p className="status-msg">Loading…</p>
   if (error && !post) return <p className="status-msg error">{error}</p>
