@@ -19,8 +19,28 @@ function NewPostPage() {
     setError(null)
 
     // TODO (student): Implement this submit logic.
-    setError('TODO: implement POST /api/posts in NewPostPage')
-    setSubmitting(false)
+    try {
+      const response = await fetch('/api/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title: e.target.title.value,
+          author: e.target.author.value,
+          content: e.target.content.value
+        })
+      })
+      if (!response.ok) {
+        throw new Error('Failed to create post')
+      }
+      const data = await response.json()
+      navigate(`/posts/${data._id}`)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (

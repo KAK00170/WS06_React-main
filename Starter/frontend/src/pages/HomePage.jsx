@@ -14,7 +14,16 @@ function HomePage() {
 
   useEffect(() => {
     // TODO (student): Replace this placeholder with real fetch logic.
-    setLoading(false)
+    fetch('/api/posts')
+      .then((res) => res.json())
+      .then((data) => {
+        setPosts(data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        setError(err.message)
+        setLoading(false)
+      })
   }, [])
 
   if (loading) return <p className="status-msg">Loading posts…</p>
